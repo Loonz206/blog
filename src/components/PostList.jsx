@@ -1,11 +1,13 @@
 import React, { Component } from "react";
+import { arrayOf, shape, number, func } from "prop-types";
 import { connect } from "react-redux";
-import fetchPosts from "../actions";
+import { fetchPostsAndUsers } from "../actions";
+import UserHeader from "./UserHeader";
 
 class PostList extends Component {
   componentDidMount() {
-    const { getPosts } = this.props;
-    getPosts();
+    const { getPostsAndUsers } = this.props;
+    getPostsAndUsers();
   }
 
   renderList() {
@@ -19,6 +21,7 @@ class PostList extends Component {
               <h2>{post.title}</h2>
               <p>{post.body}</p>
             </div>
+            <UserHeader userId={post.userId} />
           </div>
         </div>
       );
@@ -30,8 +33,14 @@ class PostList extends Component {
   }
 }
 
-PostList.defaultProps = {
-  posts: []
+PostList.propTypes = {
+  posts: arrayOf(
+    shape({
+      id: number,
+      userId: number
+    })
+  ).isRequired,
+  getPostsAndUsers: func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -40,5 +49,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { getPosts: fetchPosts }
+  { getPostsAndUsers: fetchPostsAndUsers }
 )(PostList);
