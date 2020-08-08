@@ -1,17 +1,15 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { arrayOf, shape, number, func } from "prop-types";
 import { connect } from "react-redux";
 import { fetchPostsAndUsers } from "../actions";
 import UserHeader from "./UserHeader";
 
-class PostList extends Component {
-  componentDidMount() {
-    const { getPostsAndUsers } = this.props;
+const PostList = ({ getPostsAndUsers, posts }) => {
+  useEffect(() => {
     getPostsAndUsers();
-  }
+  }, [getPostsAndUsers]);
 
-  renderList() {
-    const { posts } = this.props;
+  const renderList = () => {
     return posts.map(post => {
       return (
         <div className="item" key={post.id}>
@@ -26,12 +24,9 @@ class PostList extends Component {
         </div>
       );
     });
-  }
-
-  render() {
-    return <div className="ui relaxed divided list">{this.renderList()}</div>;
-  }
-}
+  };
+  return <div className="ui relaxed divided list">{renderList()}</div>;
+};
 
 PostList.propTypes = {
   posts: arrayOf(
